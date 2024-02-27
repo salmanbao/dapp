@@ -1,0 +1,34 @@
+input.active:valid {
+  box-shadow: 0 0 5px 1px green;
+}
+
+input.active:invalid {
+  box-shadow: 0 0 5px 1px red;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  padding: 25px;
+}
+
+.formControl {
+  padding: 15px;
+  width: 100%;
+}
+
+.btn {
+  margin-top: 25px;
+  padding: 10px;
+}
+
+.balance {
+  font-size: 12px;
+  margin-top: 5px;
+}

@@ -1,0 +1,35 @@
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem; /* Adjust padding as needed */
+    background-color: #030303; /* Example background color */
+  }
+  
+  .container {
+    width: 100%; 
+    /* max-width: 1200px; Limit container width if needed */
+    margin: 0 auto;
+    display: flex; 
+    align-items: center;
+    justify-content: space-between;
+  }
+  
+  .leftSide { 
+    /* Add styling if necessary */
+  }
+  
+  .rightSide { 
+    /* Add styling if necessary */
+  }
+  
+  .button {
+    padding: 0.5rem 1rem; 
+    background-color: #0070f3; /* Example button color */
+    color: white; 
+    border: none;
+    border-radius: 5px; 
+    cursor: pointer; 
+    text-decoration: none; 
+  }
+  
