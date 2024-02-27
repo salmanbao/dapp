@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import styles from "./topup.module.css"; // Assuming you're using CSS modules
 import { Dapp, Erc20 } from "@/abi";
 import { useAccount } from "wagmi";
@@ -24,9 +24,8 @@ function toBigInt(n: string) {
 }
 
 function Topup() {
-
-   // amount to deposit
-   const [amount, setAmount] = useState("");
+  // amount to deposit
+  const [amount, setAmount] = useState("");
 
   // user topup token balance deposited in user wallet
   const [balance, setBalance] = useState("0");
@@ -43,13 +42,13 @@ function Topup() {
   // transaction receipt of the transaction
   const [receipt, setReceipt] = useState<TransactionReceipt>();
 
-  let walletClient: WalletClient;
+  const [walletClient, setwalletClient] = useState<WalletClient>();
 
   const ZERO = parseUnits("0", 18);
   const MAX = toBigInt(
     "115792089237316195423570985008687907853269984665640564039457584007913129639935"
   );
-    
+
   // Get current connected account
   const account = useAccount();
 
@@ -95,7 +94,6 @@ function Topup() {
     e.preventDefault();
     try {
       setPending(true);
-      console.log("submitting tx", parseEther(amount.toString()));
       const { request } = await client.simulateContract({
         abi: Dapp.abi,
         address: `0x${Dapp.address}`,
@@ -104,9 +102,15 @@ function Topup() {
         account: account.address,
       });
 
-      const hash = await walletClient.writeContract(request);
-      setHash(hash);
+      const hash = await walletClient?.writeContract(request);
+      const transaction = await client.waitForTransactionReceipt({
+        hash: hash!,
+      });
+      toast.info(`tx:${transaction.transactionHash}`);
+      setReceipt(receipt);
+      setHash(hash!);
     } catch (error) {
+      console.log(error);
       if (error instanceof IntegerOutOfRangeError) {
         toast.error("Amount should be positive number");
       }
@@ -133,22 +137,19 @@ function Topup() {
     fetchData();
 
     (async () => {
-      // watching the hash for new transactions
-      if (hash.length > 2) {
-        const receipt = await client.waitForTransactionReceipt({ hash });
-        toast.done(`tx:${receipt.transactionHash}`);
-        setReceipt(receipt);
-      }
-
       // intializing our wallet client so we can call smart contract functions
-      if (window.ethereum != undefined) {
-        walletClient = createWalletClient({
+      setwalletClient(
+        createWalletClient({
           chain: goerli,
           transport: custom(window.ethereum!),
-        });
-      }
+        })
+      );
     })();
-  }, [hash]);
+  }, []);
+
+  if (walletClient == null) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>

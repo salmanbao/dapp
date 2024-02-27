@@ -1,6 +1,10 @@
 ## Getting Started
 
-First, run the development server:
+#### Install Dependencies
+```bash
+npm i
+```
+run the development server:
 
 ```bash
 npm run dev
@@ -20,4 +24,4 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## Vercel Link
 
-[Vercel Link](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) 
+[Vercel Link](https://dapp-eight-silk.vercel.app/)

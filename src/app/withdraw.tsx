@@ -29,14 +29,16 @@ function Withdraw() {
 
   // hash of the transaction
   const [hash, setHash] = useState<Hash>("0x");
-  
+
   // transaction receipt of the transaction
   const [receipt, setReceipt] = useState<TransactionReceipt>();
+
+  const [walletClient, setwalletClient] = useState<WalletClient>();
 
   // current connect wallet
   const account = useAccount();
 
-  let walletClient: WalletClient;
+  // let walletClient: WalletClient;
 
   // used to do prefectching of user deposited topup tokens
   const prefetch = async () => {
@@ -58,25 +60,17 @@ function Withdraw() {
     };
     fetchData();
 
-    // 
+    //
     (async () => {
-      // watching the hash for new transactions
-      if (hash.length > 2) {
-        const receipt = await client.waitForTransactionReceipt({ hash });
-        toast.done(`tx:${receipt.transactionHash}`);
-        setReceipt(receipt);
-
-        // intializing our wallet client so we can call smart contract functions
-        if (window.ethereum != undefined) {
-          walletClient = createWalletClient({
-            chain: goerli,
-            transport: custom(window.ethereum!),
-          });
-        }
-
-      }
+      // intializing our wallet client so we can call smart contract functions
+      setwalletClient(
+        createWalletClient({
+          chain: goerli,
+          transport: custom(window.ethereum!),
+        })
+      );
     })();
-  }, [hash]);
+  }, []);
 
   // Call Dapp smart contract withdraw function
   const withdraw = async (e: any) => {
@@ -92,9 +86,13 @@ function Withdraw() {
         account: account.address,
       });
 
-      const hash = await walletClient.writeContract(request);
-      setHash(hash);
-
+      const hash = await walletClient?.writeContract(request);
+      const transaction = await client.waitForTransactionReceipt({
+        hash: hash!,
+      });
+      toast.info(`tx:${transaction.transactionHash}`);
+      setReceipt(receipt);
+      setHash(hash!);
     } catch (error) {
       if (error instanceof IntegerOutOfRangeError) {
         toast.error("Amount should be positive number");
@@ -114,6 +112,10 @@ function Withdraw() {
     }
     setPending(false);
   };
+
+  if (walletClient == null) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div>

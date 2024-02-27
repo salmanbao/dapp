@@ -4,6 +4,7 @@ import { createPublicClient, http } from "viem";
 import { cookieStorage, createStorage } from "wagmi";
 import { goerli } from "wagmi/chains";
 import "viem/window";
+import { metaMask } from "@wagmi/connectors";
 
 // Get projectId at https://cloud.walletconnect.com
 export const projectId = process.env.NEXT_PUBLIC_PROJECT_ID;
@@ -20,6 +21,7 @@ const metadata = {
 // Create wagmiConfig
 export const config = defaultWagmiConfig({
   chains: [goerli], // required
+  connectors: [metaMask()],
   projectId, // required
   metadata, // required
   ssr: true,
@@ -34,5 +36,5 @@ export const config = defaultWagmiConfig({
 
 export const client = createPublicClient({
   chain: goerli,
-  transport: http(),
+  transport: http(`https://goerli.infura.io/v3/${process.env.INFURA_ID}`),
 });
