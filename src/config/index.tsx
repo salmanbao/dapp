@@ -36,5 +36,5 @@ export const config = defaultWagmiConfig({
 
 export const client = createPublicClient({
   chain: goerli,
-  transport: http(`https://goerli.infura.io/v3/${process.env.INFURA_ID}`),
+  transport: http(`https://goerli.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`),
 });
