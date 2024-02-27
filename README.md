@@ -2,9 +2,14 @@
 
 #### Install Dependencies
 ```bash
-npm i
+npm install
 ```
-run the development server:
+
+### Topup Token
+For getting Topup Tokens we can mint from the [link](https://goerli.etherscan.io/address/0x88Cb6E5F016BAF0c1cfAf09ED6C103153E9cF7Ce) faucet
+
+
+### Run the development server:
 
 ```bash
 npm run dev
@@ -24,4 +29,4 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 ## Vercel Link
 
-[Vercel Link](https://dapp-eight-silk.vercel.app/)
+[Vercel Link](https://dapp-bfyztr7k6-salmanbao.vercel.app/)
